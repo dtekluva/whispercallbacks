@@ -1,3 +1,4 @@
+import os
 from decouple import Csv, config
 from pathlib import Path
 
@@ -11,10 +12,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY', default=get_random_secret_key())
+SECRET_KEY = config('SECRET_KEY', default=get_random_secret_key(), cast=str)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = int(config('DEBUG', default=False))
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
@@ -24,14 +25,14 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 INSTALLED_APPS = [
     # Local app
     'call_backs',
-    
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     # Third party Library
     'rest_framework',
 ]
@@ -70,28 +71,16 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-if DEBUG:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql_psycopg2",
-            "NAME": config("DATABASE_NAME"),
-            "USER": config("DATABASE_USER"),
-            "PASSWORD": config("DATABASE_PASSWORD"),
-            "HOST": config("DATABASE_HOST"),
-            "PORT": config("DATABASE_PORT"),
-        }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": config("DATABASE_NAME"),
+        "USER": config("DATABASE_USER"),
+        "PASSWORD": config("DATABASE_PASSWORD"),
+        "HOST": config("DATABASE_HOST"),
+        "PORT": config("DATABASE_PORT"),
     }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql_psycopg2",
-            "NAME": config("DATABASE_NAME"),
-            "USER": config("DATABASE_USER"),
-            "PASSWORD": config("DATABASE_PASSWORD"),
-            "HOST": config("DATABASE_HOST"),
-            "PORT": config("DATABASE_PORT"),
-        }
-    }
+}
 
 
 # Password validation
@@ -116,9 +105,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'Africa/Lagos'
+LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Lagos'
 
 USE_I18N = True
 
@@ -127,8 +116,18 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-STATIC_URL = 'static/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
+
+# Extra lookup directories for collectstatic to find static files
+STATICFILES_DIRS = []
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
