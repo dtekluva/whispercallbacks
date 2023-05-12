@@ -1,39 +1,41 @@
+import uuid
+
+from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils.translation import gettext as _
 
 
 # Create your model(s) here.
-class DotgoCallback(models.Model):
-    sender_id = models.CharField(max_length=2200)
-    sms_id = models.CharField(max_length=2200)
-    price = models.CharField(max_length=2200)
-    account_balance = models.CharField(max_length=2200)
-    raw_status = models.CharField(max_length=2200)
-    ref_id = models.CharField(max_length=2200)
-    raw_data = models.CharField(max_length=2200)
-    date_created = models.DateTimeField(auto_now_add=True)
-    updated_date_created = models.DateTimeField(auto_now=True)
-    
+class BaseModel(models.Model):
+    """Base model for reuse.
+    Args:
+        models (Model): Django's model class.
+    """
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(
+        _('date created'), auto_now_add=True, null=True, blank=True)
+    updated_at = models.DateTimeField(
+        _('date updated'), auto_now=True, null=True, blank=True)
+
     class Meta:
-        ordering = ["-date_created"]
+        abstract = True
 
 
-class RouteCallback(models.Model):
-    data = models.TextField()
-    description = models.CharField(max_length=2200)
-    status = models.CharField(max_length=2200)
-    sender_id = models.CharField(max_length=2200)
-    bulkId = models.CharField(max_length=2200)
-    price = models.CharField(max_length=2200)
-    account_balance = models.CharField(max_length=2200)
-    timestamp = models.CharField(max_length=2200)
-    event_timestamp = models.CharField(max_length=2200)
-    sms_id = models.CharField(max_length=2200)
-    ref_id = models.CharField(max_length=2200)
-    to = models.CharField(max_length=2200)
-    source = models.CharField(max_length=2200)
-    raw_status = models.CharField(max_length=2200)
-    date_created = models.DateTimeField(auto_now_add=True)
-    updated_date_created = models.DateTimeField(auto_now=True)
-    
+class User(BaseModel, AbstractUser):
+    pass
+
+    def __str__(self) -> str:
+        return self.username
+
     class Meta:
-        ordering = ["-date_created"]
+        ordering = ["-created_at"]
+
+
+class ExchangeTelecomDlr(BaseModel):
+    payload = models.TextField()
+
+    def __str__(self) -> str:
+        return self.email
+
+    class Meta:
+        ordering = ["-created_at"]
