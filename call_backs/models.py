@@ -29,13 +29,17 @@ class User(BaseModel, AbstractUser):
 
     class Meta:
         ordering = ["-created_at"]
+        verbose_name = "USER PROFILE"
+        verbose_name_plural = "USER PROFILES"
 
 
 class ExchangeTelecomDlr(BaseModel):
     payload = models.TextField()
 
     def __str__(self) -> str:
-        return self.email
+        return self.payload
 
     class Meta:
         ordering = ["-created_at"]
+        verbose_name = "EXCHANGE TELECOM DLR"
+        verbose_name_plural = "EXCHANGE TELECOM DLRS"

@@ -1,6 +1,9 @@
 from django.urls import path
 
-from call_backs.views import *
+from call_backs.views import (
+    ExchangeTelecomDlrAPIView,
+
+)
 
 
 urlpatterns = [
