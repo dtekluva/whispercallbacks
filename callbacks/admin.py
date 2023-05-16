@@ -3,10 +3,9 @@ from import_export.admin import ImportExportModelAdmin
 
 from django.contrib import admin
 
-from call_backs.models import (
+from callbacks.models import (
     ExchangeTelecomDlr,
-    User,
-
+    User
 )
 
 

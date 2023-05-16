@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class CallBacksConfig(AppConfig):
+class CallbacksConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'call_backs'
+    name = 'callbacks'
