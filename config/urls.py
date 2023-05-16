@@ -4,6 +4,6 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/', include('call_backs.urls')),
+    path('api/v1/', include('callbacks.urls')),
 
 ]

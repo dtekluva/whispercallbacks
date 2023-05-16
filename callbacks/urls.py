@@ -1,6 +1,6 @@
 from django.urls import path
 
-from call_backs.views import (
+from callbacks.views import (
     ExchangeTelecomDlrAPIView,
 
 )

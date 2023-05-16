@@ -24,7 +24,7 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
 INSTALLED_APPS = [
     # Local app
-    'call_backs',
+    'callbacks',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Third party Library
+    'django_celery_beat',
     'import_export',
     'rest_framework',
 ]
@@ -135,4 +136,12 @@ STATICFILES_DIRS = []
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'call_backs.User'
+AUTH_USER_MODEL = 'callbacks.User'
+
+# Celery configuration
+CELERY_BROKER_URL = "redis://127.0.0.1:6379"
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = 'django-db'

@@ -34,10 +34,33 @@ class User(BaseModel, AbstractUser):
 
 
 class ExchangeTelecomDlr(BaseModel):
+    MESSAGE_SERVICE_CHOICES = (
+        ("wprohtmt", "PROMOTIONAL"),
+        ("wtrxhtmo", "TRANSACTIONAL")
+    )
+    MESSAGE_STATUS_CHOICES = [
+        ("200", "DELIVERED"),
+        ("400", "EXPIRED"),
+        ("403", "DELETED"),
+        ("404", "UNDELIVERED"),
+        ("405", "UNKNOWN"),
+        ("406", "ACCEPTED"),
+        ("407", "REJECTED")
+
+    ]
+    message_id = models.CharField(max_length=125)
+    message_service = models.CharField(
+        max_length=125, choices=MESSAGE_SERVICE_CHOICES, null=True, blank=True
+    )
+    external_id = models.CharField(max_length=125)
+    recipient = models.CharField(max_length=125)
+    message_status = models.CharField(
+        max_length=125, choices=MESSAGE_STATUS_CHOICES
+    )
     payload = models.TextField()
 
     def __str__(self) -> str:
-        return self.payload
+        return self.recipient
 
     class Meta:
         ordering = ["-created_at"]
