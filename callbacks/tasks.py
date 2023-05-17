@@ -26,7 +26,9 @@ def send_exchange_telecom_callback():
             redis_database.get(key) for key in available_keys
         ]
         for data in available_data:
-            payload = json.dumps(data)
+            raw_data = json.loads(data)
+            payload = json.dumps(raw_data)
+
             response = make_request(
                 "POST", dict(
                     url=url,
