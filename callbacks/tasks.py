@@ -9,7 +9,7 @@ WHISPERSMS_EXCHANGE_TELECOM_URL = "https://whispersms.xyz/whisper/sms_callback_e
 
 
 # Create your task(s) here.
-@shared_task()
+@shared_task
 def send_exchange_telecom_callback():
     url = WHISPERSMS_EXCHANGE_TELECOM_URL
     headers = {
