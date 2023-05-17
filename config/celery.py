@@ -1,8 +1,9 @@
+from __future__ import absolute_import, unicode_literals
+
 import os
 import django
 
 from celery import Celery
-from __future__ import absolute_import, unicode_literals
 
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'whisper.settings'
