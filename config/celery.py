@@ -1,18 +1,17 @@
 import os
+import django
 
 from celery import Celery
+from __future__ import absolute_import, unicode_literals
 
-from django.conf import settings
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'whisper.settings'
+django.setup()
 
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
-
-app = Celery('config')
-app.conf.update(
-    enable_utc=False,
-    result_expires=3600,
-    timezone=settings.TIME_ZONE
-
-)
+app = Celery("config")
+app.conf.enable_utc = False
+app.conf.update(timezone="Africa/Lagos")
 app.config_from_object('django.conf:settings', namespace='CELERY')
+
 app.autodiscover_tasks()
