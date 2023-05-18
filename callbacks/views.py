@@ -117,6 +117,39 @@ class DotgoDlrAPIView(APIView):
 
 
 class InfobipDlrAPIView(APIView):
+    serializer_class = MessageStatusSerializer
 
     def post(self, request):
-        pass
+        message_id = str(datetime.now())
+
+        data = json.loads(request.body)
+        data = request.data.get("results")[0]
+
+        data["description"] = data['status']['groupName'].upper()
+        data["status"] = data["status"]['name'].upper()
+        data["sender_id"] = data.get("id", "-")
+        data["bulkId"] = data.get("bulkId", "")
+        data["price"] = data.get("price", "").get("pricePerMessage")
+        data["account_balance"] = data.get("account_balance", "empty")
+        data["raw_status"] = str(data)
+        data["timestamp"] = data.get("doneAt", "")
+        data["event_timestamp"] = data.get("doneAt", "")
+        data["sms_id"] = data.get("messageId", "")
+        data["ref_id"] = data.get("bulkId", "")
+        data["source"] = "INFOBIP"
+
+        raw_data = data.get("raw_status")
+
+        connect_infobip_database.set(message_id, raw_data)
+
+        serializer = self.serializer_class(data=data)
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+
+            data = {
+                'status': True,
+                'message': 'Successful',
+                'data': serializer.data
+            }
+            return JsonResponse(data=data, status=status.HTTP_201_CREATED)

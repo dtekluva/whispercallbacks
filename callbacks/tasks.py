@@ -66,11 +66,11 @@ def send_route_callback():
                     data=payload
                 )
             )
-            if response.get("message") == "Success":
+            if response.get("message") == "Successful":
                 connect_route_database.delete(*available_keys)
                 return "CALLBACK SENT SUCCESSFULLY"
     else:
-        print("NO AVAILABLE DATA !")
+        return "NO AVAILABLE DATA !"
 
 
 @shared_task
@@ -92,11 +92,11 @@ def send_dotgo_callback():
                     data=payload
                 )
             )
-            if response.get("message") == "Success":
+            if response.get("response") == "ok":
                 connect_dotgo_database.delete(*available_keys)
                 return "CALLBACK SENT SUCCESSFULLY"
     else:
-        print("NO AVAILABLE DATA !")
+        return "NO AVAILABLE DATA !"
 
 
 @shared_task
@@ -122,4 +122,4 @@ def send_infobip_callback():
                 connect_infobip_database.delete(*available_keys)
                 return "CALLBACK SENT SUCCESSFULLY"
     else:
-        print("NO AVAILABLE DATA !")
+        return "NO AVAILABLE DATA !"
