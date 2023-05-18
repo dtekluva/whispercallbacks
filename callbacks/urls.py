@@ -12,7 +12,7 @@ from callbacks.views import (
 urlpatterns = [
     path('exchange_telecom/', ExchangeTelecomDlrAPIView.as_view()),
     path('route/', RouteDlrAPIView.as_view()),
-    path('dotgo', DotgoDlrAPIView.as_view()),
+    path('dotgo/', DotgoDlrAPIView.as_view()),
     path('infobip/', InfobipDlrAPIView.as_view()),
 
 ]
