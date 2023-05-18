@@ -1,4 +1,5 @@
 import json
+import traceback
 from datetime import datetime
 
 from django.http.response import JsonResponse
@@ -45,6 +46,7 @@ class RouteDlrAPIView(APIView):
 
     def post(self, request):
         data = {}
+        message_id = str(datetime.now())
 
         data["description"] = request.POST.get("sStatus").upper()
         data["status"] = request.POST.get("sStatus").upper()
@@ -58,7 +60,10 @@ class RouteDlrAPIView(APIView):
         data["ref_id"] = request.POST.get("sMessageId", "")
         data["to"] = request.POST.get("sMobileNo", "")
         data["source"] = "ROUTE"
-        data["raw_status"] = json.dumps(data)
+        raw_data = json.dumps(data)
+        data["raw_status"] = raw_data
+
+        connect_route_database.set(message_id, raw_data)
 
         serializer = self.serializer_class(data=data)
 
@@ -74,9 +79,41 @@ class RouteDlrAPIView(APIView):
 
 
 class DotgoDlrAPIView(APIView):
+    serializer_class = MessageStatusSerializer
 
     def post(self, request):
-        pass
+        try:
+            message_id = str(datetime.now())
+
+            data = json.loads(request.data)
+            data["sender_id"] = data.get("id", "")
+            data["sms_id"] = data.get("ref_id", "")
+            data["price"] = data.get("price", "empty")
+            data["account_balance"] = data.get("account_balance", "empty")
+            data["raw_status"] = "{}"  # str(data)
+            data["ref_id"] = data.get("id", "")
+            raw_data = json.dumps(data)
+
+            connect_dotgo_database(message_id, raw_data)
+
+            serializer = self.serializer_class(data=data)
+
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+
+                data = {
+                    'status': True,
+                    'message': 'Successful',
+                    'data': serializer.data
+                }
+
+                response = "ok"
+
+        except Exception as error:
+
+            response = str(traceback.format_exc()), str(error)
+
+        return Response({"response": response}, status=status.HTTP_201_CREATED)
 
 
 class InfobipDlrAPIView(APIView):
