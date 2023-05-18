@@ -5,7 +5,6 @@ from requests import exceptions, request
 def make_request(request_type: str, params: dict) -> dict:
     try:
         response = request(request_type, **params)
-        print("MAKE REQUEST HANDLER", response.json())
         return response.json()
     except exceptions.RequestException as error:
         return {

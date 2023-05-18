@@ -66,3 +66,31 @@ class ExchangeTelecomDlr(BaseModel):
         ordering = ["-created_at"]
         verbose_name = "EXCHANGE TELECOM DLR"
         verbose_name_plural = "EXCHANGE TELECOM DLRS"
+
+
+class MessageStatus(BaseModel):
+    device_provider = models.CharField(max_length=2300, null=True, blank=True)
+    account_balance = models.CharField(max_length=2200)
+    event_timestamp = models.CharField(max_length=2200)
+    sender_id = models.CharField(max_length=2200)
+    timestamp = models.CharField(max_length=2200)
+    raw_status = models.TextField(max_length=3000, default="")
+    sms_id = models.CharField(max_length=2200)
+    ref_id = models.CharField(max_length=2200)
+    status = models.CharField(max_length=2200)
+    price = models.CharField(max_length=2200)
+    to = models.CharField(max_length=2200)
+    source = models.CharField(max_length=20, default="DOTGO")
+    route_updated = models.BooleanField(default=False)
+    dlr_push_count = models.IntegerField(default=0)
+    dlr_response = models.CharField(max_length=10, default=0)
+    dlr_status_code = models.CharField(max_length=10, default=0)
+    updated_date_created = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return self.to
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "MESSAGE STATUS"
+        verbose_name_plural = "MESSAGE STATUSES"
