@@ -34,7 +34,7 @@ class ExchangeTelecomDlrAPIView(APIView):
             message_id=message_id,
             message_service=raw_data.get("X-Service"),
             external_id=raw_data.get("X-External-Id"),
-            recipient=raw_data.get("X-Sender"),
+            recipient=raw_data.get("X-Sender")[:13],
             message_status=raw_data.get("X-Status"),
             payload=data
         )
