@@ -5,6 +5,7 @@ from django.contrib import admin
 
 from callbacks.models import (
     ExchangeTelecomDlr,
+    MessageStatus,
     User
 )
 
@@ -16,6 +17,12 @@ class ExchangeTelecomDlrResource(resources.ModelResource):
         model = ExchangeTelecomDlr
 
 
+class MessageStatusResource(resources.ModelResource):
+
+    class Meta:
+        model = MessageStatus
+
+
 class UserProfileResource(resources.ModelResource):
 
     class Meta:
@@ -24,6 +31,16 @@ class UserProfileResource(resources.ModelResource):
 
 class ExchangeTelecomDlrResourceAdmin(ImportExportModelAdmin):
     resource_class = ExchangeTelecomDlrResource
+    search_fields = []
+    list_filter = ("message_service", "message_status")
+    date_hierarchy = "created_at"
+
+    def get_list_display(self, request):
+        return [field.name for field in self.model._meta.concrete_fields]
+
+
+class MessageStatusResourceAdmin(ImportExportModelAdmin):
+    resource_class = MessageStatusResource
     search_fields = []
     list_filter = ()
     date_hierarchy = "created_at"
@@ -43,4 +60,5 @@ class UserProfileResourceAdmin(ImportExportModelAdmin):
 
 
 admin.site.register(ExchangeTelecomDlr, ExchangeTelecomDlrResourceAdmin)
+admin.site.register(MessageStatus, MessageStatusResourceAdmin)
 admin.site.register(User, UserProfileResourceAdmin)
