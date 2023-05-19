@@ -153,3 +153,40 @@ class InfobipDlrAPIView(APIView):
                 'data': serializer.data
             }
             return JsonResponse(data=data, status=status.HTTP_201_CREATED)
+
+
+class RouteTwoDlrAPIView(APIView):
+    serializer_class = MessageStatusSerializer
+
+    def post(self, request):
+        data = {}
+        message_id = str(datetime.now())
+
+        data["description"] = request.POST.get("sStatus").upper()
+        data["status"] = request.POST.get("sStatus").upper()
+        data["sender_id"] = request.POST.get("sStatus").upper()
+        data["bulkId"] = request.POST.get("bulkId", "")
+        data["price"] = request.POST.get("iCostPerSms", "")
+        data["account_balance"] = request.POST.get("account_balance", "empty")
+        data["timestamp"] = request.POST.get("dtDone", "")
+        data["event_timestamp"] = request.POST.get("dtSubmit", "")
+        data["sms_id"] = request.POST.get("sMessageId", "")
+        data["ref_id"] = request.POST.get("sMessageId", "")
+        data["to"] = request.POST.get("sMobileNo", "")
+        data["source"] = "ROUTE_TRANS"
+        raw_data = json.dumps(data)
+        data["raw_status"] = raw_data
+
+        connect_route_database.set(message_id, raw_data)
+
+        serializer = self.serializer_class(data=data)
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+
+            data = {
+                'status': True,
+                'message': 'Successful',
+                'data': serializer.data
+            }
+            return JsonResponse(data=data, status=status.HTTP_201_CREATED)
