@@ -14,5 +14,6 @@ urlpatterns = [
     path('route/', RouteDlrAPIView.as_view()),
     path('dotgo/', DotgoDlrAPIView.as_view()),
     path('infobip/', InfobipDlrAPIView.as_view()),
+    path('route_two/', RouteDlrAPIView.as_view()),
 
 ]
