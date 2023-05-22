@@ -43,6 +43,8 @@ def send_exchange_telecom_callback():
             if response.get("message") == "Success":
                 connect_exchange_database.delete(*available_keys)
                 return "CALLBACK SENT SUCCESSFULLY"
+            else:
+                return "UNABLE TO SEND CALLBACK"
     else:
         return "NO DATA AVAILABLE !"
 
@@ -69,6 +71,8 @@ def send_route_callback():
             if response.get("message") == "Successful":
                 connect_route_database.delete(*available_keys)
                 return "CALLBACK SENT SUCCESSFULLY"
+            else:
+                return "UNABLE TO SEND CALLBACK"
     else:
         return "NO AVAILABLE DATA !"
 
@@ -95,6 +99,8 @@ def send_dotgo_callback():
             if response.get("response") == "ok":
                 connect_dotgo_database.delete(*available_keys)
                 return "CALLBACK SENT SUCCESSFULLY"
+            else:
+                return "UNABLE TO SEND CALLBACK"
     else:
         return "NO AVAILABLE DATA !"
 
@@ -121,5 +127,7 @@ def send_infobip_callback():
             if response.get("message") == "Success":
                 connect_infobip_database.delete(*available_keys)
                 return "CALLBACK SENT SUCCESSFULLY"
+            else:
+                return "UNABLE TO SEND CALLBACK"
     else:
         return "NO AVAILABLE DATA !"
