@@ -138,7 +138,7 @@ class InfobipDlrAPIView(APIView):
         data["ref_id"] = data.get("bulkId", "")
         data["source"] = "INFOBIP"
 
-        raw_data = data.get("raw_status")
+        raw_data = json.dumps(data)
 
         connect_infobip_database.set(message_id, raw_data)
 
