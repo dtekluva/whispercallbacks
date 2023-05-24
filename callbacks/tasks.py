@@ -14,10 +14,10 @@ HEADERS = {
     "Content-type": "application/json"
 }
 
-WHISPERSMS_DOTGO_URL = "https://whispersms.xyz/whisper/sms_callback/"
+WHISPERSMS_DOTGO_URL = "https://whispersms.xyz/whisper/sms_callback_v2/"
 WHISPERSMS_EXCHANGE_TELECOM_URL = "https://whispersms.xyz/whisper/sms_callback_exchange/"
-WHISPERSMS_INFOBIP_URL = "https://whispersms.xyz/whisper/sms_callback_infobip/"
-WHISPERSMS_ROUTE_URL = "https://whispersms.xyz/whisper/sms_callback_route/"
+WHISPERSMS_INFOBIP_URL = "https://whispersms.xyz/whisper/sms_callback_infobip_v2/"
+WHISPERSMS_ROUTE_URL = "https://whispersms.xyz/whisper/sms_callback_route_v2/"
 
 
 # Create your task(s) here.
