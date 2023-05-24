@@ -1,5 +1,7 @@
 import json
 
+from django.core.management.base import BaseCommand
+
 from callbacks.models import MessageStatus
 from callbacks.tasks import HEADERS, WHISPERSMS_ROUTE_URL
 from helpers.reusable import make_request
@@ -19,7 +21,7 @@ class Command(BaseCommand):
                 "description": status.status,
                 "status": status.status,
                 "sender_id": status.sender_id,
-                "bulkId": status.bulkId,
+                "bulkId": status.ref_id,
                 "price": status.price,
                 "account_balance": status.account_balance,
                 "timestamp": status.timestamp,
@@ -27,7 +29,7 @@ class Command(BaseCommand):
                 "sms_id": status.sms_id,
                 "ref_id": status.ref_id,
                 "to": status.to,
-                "source": status
+                "source": status.source
             }
 
             payload = json.dumps(data)

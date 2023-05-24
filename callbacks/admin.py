@@ -31,7 +31,10 @@ class UserProfileResource(resources.ModelResource):
 
 class ExchangeTelecomDlrResourceAdmin(ImportExportModelAdmin):
     resource_class = ExchangeTelecomDlrResource
-    search_fields = []
+    search_fields = [
+        "external_id",
+        "recipient"
+    ]
     list_filter = ("message_service", "message_status")
     date_hierarchy = "created_at"
 
@@ -41,7 +44,10 @@ class ExchangeTelecomDlrResourceAdmin(ImportExportModelAdmin):
 
 class MessageStatusResourceAdmin(ImportExportModelAdmin):
     resource_class = MessageStatusResource
-    search_fields = []
+    search_fields = [
+        "ref_id",
+        "to"
+    ]
     list_filter = ()
     date_hierarchy = "created_at"
 
