@@ -19,6 +19,20 @@ from helpers.redis_db import (
 
 # Create your view(s) here.
 class ExchangeTelecomDlrAPIView(APIView):
+    message_service_choices = {
+        "wprohtmt": "PROMOTIONAL",
+        "wtrxhtmo": "TRANSACTIONAL",
+        "wprohtmo": "PROMOTIONAL"
+    }
+    message_status_choices = {
+        "200": "DELIVERED",
+        "400": "EXPIRED",
+        "403": "DELETED",
+        "404": "UNDELIVERED",
+        "405": "UNKNOWN",
+        "406": "ACCEPTED",
+        "407": "REJECTED"
+    }
 
     def post(self, request):
         """
@@ -32,10 +46,12 @@ class ExchangeTelecomDlrAPIView(APIView):
 
         ExchangeTelecomDlr.objects.create(
             message_id=message_id,
-            message_service=raw_data.get("X-Service"),
+            message_service=self.message_service_choices.get(
+                raw_data.get("X-Service")),
             external_id=raw_data.get("X-External-Id"),
             recipient=raw_data.get("X-Sender")[:13],
-            message_status=raw_data.get("X-Status"),
+            message_status=self.message_status_choices.get(
+                raw_data.get("X-Status")),
             payload=data
         )
         return Response(data={"message": "Success"}, status=status.HTTP_201_CREATED)
