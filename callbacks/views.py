@@ -102,6 +102,9 @@ class DotgoDlrAPIView(APIView):
             message_id = str(datetime.now())
 
             data = json.loads(request.data)
+            print(
+                f"\n\n\n\n\n\n\n\n\n\n\n\n\n\n    !!DATA!!      {data}      !!DATA!!     \n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+            )
             data["sender_id"] = data.get("id", "")
             data["sms_id"] = data.get("ref_id", "")
             data["price"] = data.get("price", "empty")
@@ -114,17 +117,22 @@ class DotgoDlrAPIView(APIView):
 
             serializer = self.serializer_class(data=data)
 
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
+            serializer.is_valid(raise_exception=True)
+            print(
+                f"\n\n\n\n\n\n\n\n\n\n\n\n\n\n          ATTEMPTING TO SAVE CALLBACK           \n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+            )
+            serializer.save()
 
-                data = {
-                    'status': True,
-                    'message': 'Successful',
-                    'data': serializer.data
-                }
+            print(
+                f"\n\n\n\n\n\n\n\n\n\n\n\n\n\n          CALLBACK    SAVED       ALREADY           \n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+            )
 
-                response = "ok"
-
+            data = {
+                'status': True,
+                'message': 'Successful',
+                'data': serializer.data
+            }
+            response = "ok"
         except Exception as error:
 
             response = str(traceback.format_exc()), str(error)
