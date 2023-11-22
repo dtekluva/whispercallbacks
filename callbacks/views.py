@@ -102,6 +102,9 @@ class DotgoDlrAPIView(APIView):
             message_id = str(datetime.now())
 
             data = json.loads(request.data)
+            print(
+                f"\n\n\n\n\n\n\n\n\n\n\n\n\n\n    !!DATA!!      {data}      !!DATA!!     \n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+            )
             data["sender_id"] = data.get("id", "")
             data["sms_id"] = data.get("ref_id", "")
             data["price"] = data.get("price", "empty")
