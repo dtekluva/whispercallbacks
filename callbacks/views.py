@@ -114,7 +114,7 @@ class DotgoDlrAPIView(APIView):
             data["ref_id"] = data.get("id", "")
             raw_data = json.dumps(data)
 
-            connect_dotgo_database(message_id, raw_data)
+            connect_dotgo_database.set(message_id, raw_data)
 
             serializer = self.serializer_class(data=data)
             serializer.is_valid(raise_exception=True)

@@ -1,7 +1,7 @@
 import redis
 
 INFOBIP_DB = 1
-DOTGTO_DB = 2
+DOTGO_DB = 2
 ROUTE_DB = 3
 EXCHANGE_DB = 4
 
@@ -13,7 +13,7 @@ connect_infobip_database = redis.StrictRedis(
 
 
 connect_dotgo_database = redis.StrictRedis(
-    host="localhost", port=6379, db=DOTGTO_DB, decode_responses=True
+    host="localhost", port=6379, db=DOTGO_DB, decode_responses=True
 )
 
 
