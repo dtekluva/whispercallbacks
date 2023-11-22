@@ -24,8 +24,7 @@ from .utils import PlainTextParser
 class ExchangeTelecomDlrAPIView(APIView):
     message_service_choices = {
         "wprohtmt": "PROMOTIONAL",
-        "wtrxhtmo": "TRANSACTIONAL",
-        "wprohtmo": "PROMOTIONAL"
+        "wtrxhtmo": "TRANSACTIONAL"
     }
     message_status_choices = {
         "200": "DELIVERED",
@@ -105,7 +104,8 @@ class DotgoDlrAPIView(APIView):
         try:
             message_id = str(datetime.now())
 
-            data = json.loads(request.data)
+            raw_data = request.data.decode("utf-8")
+            data = json.loads(raw_data)
             data["sender_id"] = data.get("id", "")
             data["sms_id"] = data.get("ref_id", "")
             data["price"] = data.get("price", "empty")
