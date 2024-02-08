@@ -246,4 +246,4 @@ class SmartsmsAPIView(APIView):
             'message': 'Successful',
             'data': serializer.data
         }
-        return JsonResponse(data=data, status=status.HTTP_201_CREATED)
+        return JsonResponse(data=data, status=status.HTTP_200_OK)
