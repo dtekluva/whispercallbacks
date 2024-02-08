@@ -5,6 +5,7 @@ from callbacks.views import (
     ExchangeTelecomDlrAPIView,
     InfobipDlrAPIView,
     RouteDlrAPIView,
+    SmartsmsAPIView,
 
 )
 
@@ -15,5 +16,6 @@ urlpatterns = [
     path('dotgo/', DotgoDlrAPIView.as_view()),
     path('infobip/', InfobipDlrAPIView.as_view()),
     path('route_two/', RouteDlrAPIView.as_view()),
+    path('smartsms', SmartsmsAPIView.as_view()),
 
 ]

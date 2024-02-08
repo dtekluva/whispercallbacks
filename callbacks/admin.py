@@ -1,36 +1,13 @@
-from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
 from django.contrib import admin
 
-from callbacks.models import (
-    ExchangeTelecomDlr,
-    MessageStatus,
-    User
-)
+from . import models, resources
 
 
 # Register your model(s) here.
-class ExchangeTelecomDlrResource(resources.ModelResource):
-
-    class Meta:
-        model = ExchangeTelecomDlr
-
-
-class MessageStatusResource(resources.ModelResource):
-
-    class Meta:
-        model = MessageStatus
-
-
-class UserProfileResource(resources.ModelResource):
-
-    class Meta:
-        model = User
-
-
 class ExchangeTelecomDlrResourceAdmin(ImportExportModelAdmin):
-    resource_class = ExchangeTelecomDlrResource
+    resource_class = resources.ExchangeTelecomDlrResource
     search_fields = [
         "external_id",
         "recipient"
@@ -43,7 +20,7 @@ class ExchangeTelecomDlrResourceAdmin(ImportExportModelAdmin):
 
 
 class MessageStatusResourceAdmin(ImportExportModelAdmin):
-    resource_class = MessageStatusResource
+    resource_class = resources.MessageStatusResource
     search_fields = [
         "ref_id",
         "to"
@@ -56,7 +33,7 @@ class MessageStatusResourceAdmin(ImportExportModelAdmin):
 
 
 class UserProfileResourceAdmin(ImportExportModelAdmin):
-    resource_class = UserProfileResource
+    resource_class = resources.UserProfileResource
     search_fields = []
     list_filter = ()
     date_hierarchy = "created_at"
@@ -65,6 +42,6 @@ class UserProfileResourceAdmin(ImportExportModelAdmin):
         return [field.name for field in self.model._meta.concrete_fields]
 
 
-admin.site.register(ExchangeTelecomDlr, ExchangeTelecomDlrResourceAdmin)
-admin.site.register(MessageStatus, MessageStatusResourceAdmin)
-admin.site.register(User, UserProfileResourceAdmin)
+admin.site.register(models.ExchangeTelecomDlr, ExchangeTelecomDlrResourceAdmin)
+admin.site.register(models.MessageStatus, MessageStatusResourceAdmin)
+admin.site.register(models.User, UserProfileResourceAdmin)
