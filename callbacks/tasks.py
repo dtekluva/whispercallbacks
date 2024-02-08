@@ -1,11 +1,14 @@
 import json
+
 from celery import shared_task
 
 from helpers.redis_db import (
     connect_dotgo_database,
     connect_exchange_database,
     connect_infobip_database,
-    connect_route_database
+    connect_route_database,
+    connect_smartsms_database,
+
 )
 from helpers.reusable import make_request
 
@@ -18,6 +21,7 @@ WHISPERSMS_DOTGO_URL = "https://whispersms.xyz/whisper/sms_callback_v2/"
 WHISPERSMS_EXCHANGE_TELECOM_URL = "https://whispersms.xyz/whisper/sms_callback_exchange/"
 WHISPERSMS_INFOBIP_URL = "https://whispersms.xyz/whisper/sms_callback_infobip_v2/"
 WHISPERSMS_ROUTE_URL = "https://whispersms.xyz/whisper/sms_callback_route_v2/"
+WHISPERSMS_SMARTSMS_URL = "https://whispersms.xyz/whisper/sms_callback_smartsms/"
 
 
 # Create your task(s) here.
@@ -40,11 +44,8 @@ def send_exchange_telecom_callback():
                     data=payload
                 )
             )
-            if response.get("message") == "Success":
-                connect_exchange_database.delete(*available_keys)
-                return "CALLBACK SENT SUCCESSFULLY"
-            else:
-                return "UNABLE TO SEND CALLBACK"
+        connect_exchange_database.delete(*available_keys)
+        return "CALLBACK SENT SUCCESSFULLY"
     else:
         return "NO DATA AVAILABLE !"
 
@@ -68,11 +69,8 @@ def send_route_callback():
                     data=payload
                 )
             )
-            if response.get("message") == "Successful":
-                connect_route_database.delete(*available_keys)
-                return "CALLBACK SENT SUCCESSFULLY"
-            else:
-                return "UNABLE TO SEND CALLBACK"
+        connect_route_database.delete(*available_keys)
+        return "CALLBACK SENT SUCCESSFULLY"
     else:
         return "NO AVAILABLE DATA !"
 
@@ -96,11 +94,8 @@ def send_dotgo_callback():
                     data=payload
                 )
             )
-            if response.get("response") == "ok":
-                connect_dotgo_database.delete(*available_keys)
-                return "CALLBACK SENT SUCCESSFULLY"
-            else:
-                return "UNABLE TO SEND CALLBACK"
+        connect_dotgo_database.delete(*available_keys)
+        return "CALLBACK SENT SUCCESSFULLY"
     else:
         return "NO AVAILABLE DATA !"
 
@@ -124,10 +119,32 @@ def send_infobip_callback():
                     data=payload
                 )
             )
-            if response.get("message") == "Success":
-                connect_infobip_database.delete(*available_keys)
-                return "CALLBACK SENT SUCCESSFULLY"
-            else:
-                return "UNABLE TO SEND CALLBACK"
+        connect_infobip_database.delete(*available_keys)
+        return "CALLBACK SENT SUCCESSFULLY"
+    else:
+        return "NO AVAILABLE DATA !"
+
+
+@shared_task
+def send_smartsms_callback():
+    available_keys = connect_smartsms_database.keys("*")
+
+    if available_keys:
+        available_data = [
+            connect_smartsms_database.get(key) for key in available_keys
+        ]
+        for data in available_data:
+            raw_data = json.loads(data)
+            payload = json.dumps(raw_data)
+
+            response = make_request(
+                "POST", dict(
+                    url=WHISPERSMS_SMARTSMS_URL,
+                    headers=HEADERS,
+                    data=payload
+                )
+            )
+        connect_smartsms_database.delete(*available_keys)
+        return "CALLBACK SENT SUCCESSFULLY"
     else:
         return "NO AVAILABLE DATA !"

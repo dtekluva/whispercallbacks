@@ -1,6 +1,6 @@
+from datetime import datetime
 import json
 import traceback
-from datetime import datetime
 
 from django.http.response import JsonResponse
 from rest_framework import status
@@ -14,7 +14,9 @@ from helpers.redis_db import (
     connect_dotgo_database,
     connect_exchange_database,
     connect_infobip_database,
-    connect_route_database
+    connect_route_database,
+    connect_smartsms_database,
+
 )
 
 from .utils import PlainTextParser
@@ -36,7 +38,7 @@ class ExchangeTelecomDlrAPIView(APIView):
         "407": "REJECTED"
     }
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         """
         DLR is sent via request headers.
         """
@@ -62,7 +64,7 @@ class ExchangeTelecomDlrAPIView(APIView):
 class RouteDlrAPIView(APIView):
     serializer_class = MessageStatusSerializer
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         data = {}
         message_id = str(datetime.now())
 
@@ -84,23 +86,22 @@ class RouteDlrAPIView(APIView):
         connect_route_database.set(message_id, raw_data)
 
         serializer = self.serializer_class(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-
-            data = {
-                'status': True,
-                'message': 'Successful',
-                'data': serializer.data
-            }
-            return JsonResponse(data=data, status=status.HTTP_201_CREATED)
+        data = {
+            'status': True,
+            'message': 'Successful',
+            'data': serializer.data
+        }
+        return JsonResponse(data=data, status=status.HTTP_201_CREATED)
 
 
 class DotgoDlrAPIView(APIView):
     parser_classes = [JSONParser, PlainTextParser]
     serializer_class = MessageStatusSerializer
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         try:
             message_id = str(datetime.now())
 
@@ -136,7 +137,7 @@ class InfobipDlrAPIView(APIView):
     parser_classes = [JSONParser, PlainTextParser]
     serializer_class = MessageStatusSerializer
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         message_id = str(datetime.now())
 
         data = json.loads(request.body)
@@ -161,22 +162,22 @@ class InfobipDlrAPIView(APIView):
 
         serializer = self.serializer_class(data=data)
 
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-            data = {
-                'status': True,
-                'message': 'Successful',
-                'data': serializer.data
-            }
-            return JsonResponse(data=data, status=status.HTTP_201_CREATED)
+        data = {
+            'status': True,
+            'message': 'Successful',
+            'data': serializer.data
+        }
+        return JsonResponse(data=data, status=status.HTTP_201_CREATED)
 
 
 class RouteTwoDlrAPIView(APIView):
     parser_classes = [JSONParser,]
     serializer_class = MessageStatusSerializer
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         data = {}
         message_id = str(datetime.now())
 
@@ -199,12 +200,50 @@ class RouteTwoDlrAPIView(APIView):
 
         serializer = self.serializer_class(data=data)
 
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-            data = {
-                'status': True,
-                'message': 'Successful',
-                'data': serializer.data
-            }
-            return JsonResponse(data=data, status=status.HTTP_201_CREATED)
+        data = {
+            'status': True,
+            'message': 'Successful',
+            'data': serializer.data
+        }
+        return JsonResponse(data=data, status=status.HTTP_201_CREATED)
+
+
+class SmartsmsAPIView(APIView):
+    serializer_class = MessageStatusSerializer
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        message_id = str(datetime.now())
+
+        data["description"] = data.get("messagetype")
+        data["status"] = data.get("status")
+        data["sender_id"] = data.get("sender")
+        data["bulkId"] = data.get("ref_id")
+        data["price"] = data.get("cost")
+        data["account_balance"] = data.get("account_balance", "empty")
+        data["raw_status"] = str(data)
+        data["timestamp"] = data.get("senttime")
+        data["event_timestamp"] = data.get("senttime")
+        data["sms_id"] = data.get("ref_id")
+        data["ref_id"] = data.get("ref_id")
+        data["source"] = "SMARTSMS"
+        data["to"] = data.get("mobile")
+        raw_data = json.dumps(data)
+        data["raw_status"] = raw_data
+
+        connect_smartsms_database.set(message_id, raw_data)
+
+        serializer = self.serializer_class(data=data)
+
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        data = {
+            'status': True,
+            'message': 'Successful',
+            'data': serializer.data
+        }
+        return JsonResponse(data=data, status=status.HTTP_201_CREATED)
