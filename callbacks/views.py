@@ -215,7 +215,7 @@ class SmartsmsAPIView(APIView):
     serializer_class = MessageStatusSerializer
 
     def post(self, request, *args, **kwargs):
-        data = {}
+        data = request.data
         message_id = str(datetime.now())
 
         data["description"] = data.get("messagetype")
@@ -237,7 +237,6 @@ class SmartsmsAPIView(APIView):
         connect_smartsms_database.set(message_id, raw_data)
 
         serializer = self.serializer_class(data=data)
-
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
