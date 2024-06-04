@@ -204,7 +204,7 @@ class BroadbasedDlrAPIView(APIView):
         data["sms_id"] = payload.get("reportDetail").get("id")
         data["ref_id"] = payload.get("reportDetail").get("batchId")
         data["status"] = payload.get("reportDetail").get("status")
-        data["price"] = ""
+        data["price"] = "0.0"
         data["to"] = payload.get("from")
         data["source"] = "BROADBASED"
         raw_data = json.dumps(data)
