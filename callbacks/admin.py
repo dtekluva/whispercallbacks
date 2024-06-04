@@ -1,8 +1,7 @@
+from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 
-from django.contrib import admin
-
-from . import models, resources
+from callbacks import models, resources
 
 
 # Register your model(s) here.
@@ -10,9 +9,12 @@ class ExchangeTelecomDlrResourceAdmin(ImportExportModelAdmin):
     resource_class = resources.ExchangeTelecomDlrResource
     search_fields = [
         "external_id",
-        "recipient"
+        "recipient",
     ]
-    list_filter = ("message_service", "message_status")
+    list_filter = (
+        "message_service",
+        "message_status",
+    )
     date_hierarchy = "created_at"
 
     def get_list_display(self, request):
@@ -23,7 +25,7 @@ class MessageStatusResourceAdmin(ImportExportModelAdmin):
     resource_class = resources.MessageStatusResource
     search_fields = [
         "ref_id",
-        "to"
+        "to",
     ]
     list_filter = ()
     date_hierarchy = "created_at"

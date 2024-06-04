@@ -2,6 +2,7 @@ amqp==5.1.1
 asgiref==3.5.2
 async-timeout==4.0.2
 billiard==3.6.4.0
+black==24.4.2
 celery==5.2.7
 certifi==2023.5.7
 charset-normalizer==3.1.0
@@ -23,8 +24,12 @@ et-xmlfile==1.1.0
 idna==3.4
 kombu==5.2.4
 MarkupPy==1.14
+mypy-extensions==1.0.0
 odfpy==1.4.1
 openpyxl==3.1.2
+packaging==24.0
+pathspec==0.12.1
+platformdirs==4.2.2
 prompt-toolkit==3.0.38
 psycopg2==2.9.5
 python-crontab==2.7.1
@@ -37,6 +42,8 @@ requests==2.30.0
 six==1.16.0
 sqlparse==0.4.3
 tablib==3.4.0
+tomli==2.0.1
+typing_extensions==4.12.0
 tzdata==2023.3
 urllib3==2.0.2
 vine==5.0.0

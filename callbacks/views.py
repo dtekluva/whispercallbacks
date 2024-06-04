@@ -194,8 +194,23 @@ class BroadbasedDlrAPIView(APIView):
             }
         }
         """
-        print(f"\nHEADERS:  {request.headers}\n")
-        print(f"\nBODY: {request.body}\n")
-        print(f"DATA:   {request.data}\n")
+        payload = request.data
+        data = {}
+        message_id = str(datetime.now())
+        data["account_balance"] = "empty"
+        data["event_timestamp"] = payload.get("reportDetail").get("done_date")
+        data["sender_id"] = payload.get("to")
+        data["timestamp"] = payload.get("reportDetail").get("submit_date")
+        data["sms_id"] = payload.get("reportDetail").get("id")
+        data["ref_id"] = payload.get("reportDetail").get("batchId")
+        data["status"] = payload.get("reportDetail").get("status")
+        data["price"] = ""
+        data["to"] = payload.get("from")
+        data["source"] = "BROADBASED"
+        raw_data = json.dumps(data)
+        data["raw_status"] = raw_data
+        serializer = self.serializer_class(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        connect_broadbased_database.set(message_id, raw_data)
         return Response(data={"message": "success"}, status=status.HTTP_200_OK)
-

@@ -11,11 +11,14 @@ class BaseModel(models.Model):
     Args:
         models (Model): Django's model class.
     """
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(
-        _('date created'), auto_now_add=True, null=True, blank=True)
+        _("date created"), auto_now_add=True, null=True, blank=True
+    )
     updated_at = models.DateTimeField(
-        _('date updated'), auto_now=True, null=True, blank=True)
+        _("date updated"), auto_now=True, null=True, blank=True
+    )
 
     class Meta:
         abstract = True
@@ -37,6 +40,7 @@ class ExchangeTelecomDlr(BaseModel):
     """
     Exchange Telecom Messages DLR's.
     """
+
     message_id = models.CharField(max_length=125)
     message_service = models.CharField(max_length=125, null=True, blank=True)
     external_id = models.CharField(max_length=125)

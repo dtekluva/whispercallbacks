@@ -3,6 +3,7 @@ from django.urls import path
 from callbacks import views
 
 
+# Create your url pattern(s) here.
 urlpatterns = [
     path("exchange_telecom/", views.ExchangeTelecomDlrAPIView.as_view()),
     path("route/", views.RouteDlrAPIView.as_view()),
